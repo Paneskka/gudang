@@ -1,0 +1,12 @@
+# Kredensial lokal / hosting (jangan pernah di-commit)
+config/db.local.php
+.env
+
+# Helper lokal (generator hash password)
+a.php
+
+# Log & file OS
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini

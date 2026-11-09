@@ -1,0 +1,8 @@
+<?php
+// Salin file ini menjadi config/db.local.php lalu isi kredensial sebenarnya.
+// File config/db.local.php sudah masuk .gitignore (tidak akan ter-commit).
+
+$host = "sqlXXX.infinityfree.com";
+$user = "if0_XXXXXXXX";
+$pass = "password_database_kamu";
+$dbname = "if0_XXXXXXXX_db_gudang";
