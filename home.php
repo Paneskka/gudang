@@ -73,6 +73,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["cek_status"])) {
 
     <title>Sistem Antrian Gudang</title>
 
+    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+    <link rel="apple-touch-icon" href="assets/img/favicon.svg">
+
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/home.css">
 </head>
