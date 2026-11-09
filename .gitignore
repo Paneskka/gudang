@@ -1,14 +1,7 @@
-# Kredensial lokal / hosting (jangan pernah di-commit)
 config/db.local.php
 .env
-
-# Helper lokal (generator hash password)
 a.php
-
-# Catatan konten promosi (bukan bagian aplikasi)
 script_video_promosi.txt
-
-# Log & file OS
 *.log
 .DS_Store
 Thumbs.db
