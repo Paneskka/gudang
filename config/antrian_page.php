@@ -7,18 +7,46 @@
 
 require "config/db.php";
 require "config/auth.php";
+require_once "config/panggilan.php";
 
 $jenis_kegiatan = $jenis_kegiatan ?? "bongkar";
 $jenis_label    = $jenis_label ?? "Masuk";
 
 $status_valid    = ["menunggu", "diproses", "selesai"];
 $status_dropdown = ["menunggu", "diproses"]; // tanpa "selesai" (pake tombol)
-$pesan = "";
+$pesan = $_SESSION["panggilan_pesan"] ?? "";
+unset($_SESSION["panggilan_pesan"]);
 $tipe_pesan = "success";
+if (!isset($_SESSION["panggilan_token"])) {
+    $_SESSION["panggilan_token"] = bin2hex(random_bytes(32));
+}
 
 // ================= AKSI =================
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $aksi = $_POST["aksi"] ?? "";
+
+    if ($aksi === "panggil") {
+        $token = $_POST["panggilan_token"] ?? "";
+        if (!is_string($token) || !hash_equals($_SESSION["panggilan_token"], $token)) {
+            $pesan = "Sesi formulir tidak valid. Muat ulang halaman lalu coba lagi.";
+            $tipe_pesan = "error";
+        } else {
+            try {
+                $nomor = panggil_antrian($conn, (int) ($_POST["id"] ?? 0), $jenis_kegiatan);
+                $_SESSION["panggilan_pesan"] = "Antrian $nomor dipanggil dan ditampilkan di halaman pendaftaran. Status menjadi diproses.";
+                $tujuan = $jenis_kegiatan === "bongkar" ? "antrian_masuk.php" : "antrian_keluar.php";
+                $filter = http_build_query($_GET);
+                header("Location: " . $tujuan . ($filter !== "" ? "?" . $filter : ""), true, 303);
+                exit;
+            } catch (DomainException $e) {
+                $pesan = $e->getMessage();
+                $tipe_pesan = "error";
+            } catch (mysqli_sql_exception $e) {
+                $pesan = "Gagal memanggil antrian. Silakan coba lagi.";
+                $tipe_pesan = "error";
+            }
+        }
+    }
 
     if ($aksi === "status") {
         $id     = (int) ($_POST["id"] ?? 0);
@@ -29,11 +57,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $tipe_pesan = "error";
         } else {
             try {
-                $stmt = $conn->prepare("UPDATE antrian SET status = ? WHERE id = ? AND jenis_kegiatan = ?");
+                $conn->begin_transaction();
+                $stmt = $conn->prepare("UPDATE antrian SET status = ? WHERE id = ? AND jenis_kegiatan = ? AND status <> 'selesai'");
                 $stmt->bind_param("sis", $status, $id, $jenis_kegiatan);
                 $stmt->execute();
+                if ($status !== "diproses") {
+                    hapus_panggilan($conn, $id, $jenis_kegiatan);
+                }
+                $conn->commit();
                 $pesan = "Status antrian berhasil diperbarui.";
             } catch (mysqli_sql_exception $e) {
+                $conn->rollback();
                 $pesan = "Gagal memperbarui status.";
                 $tipe_pesan = "error";
             }
@@ -47,6 +81,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
             $id = (int) ($_POST["id"] ?? 0);
             try {
+                $conn->begin_transaction();
+                $stmt = $conn->prepare("SELECT id FROM antrian WHERE id = ? AND jenis_kegiatan = ? FOR UPDATE");
+                $stmt->bind_param("is", $id, $jenis_kegiatan);
+                $stmt->execute();
+                if (!$stmt->get_result()->fetch_assoc()) {
+                    throw new DomainException("Antrian tidak ditemukan pada jalur ini.");
+                }
                 // Hapus juga data barang terkait
                 $stmt = $conn->prepare("DELETE FROM antrian_barang WHERE antrian_id = ?");
                 $stmt->bind_param("i", $id);
@@ -55,8 +96,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $stmt = $conn->prepare("DELETE FROM antrian WHERE id = ? AND jenis_kegiatan = ?");
                 $stmt->bind_param("is", $id, $jenis_kegiatan);
                 $stmt->execute();
+                hapus_panggilan($conn, $id, $jenis_kegiatan);
+                $conn->commit();
                 $pesan = "Data antrian berhasil dihapus.";
-            } catch (mysqli_sql_exception $e) {
+            } catch (mysqli_sql_exception | DomainException $e) {
+                $conn->rollback();
                 $pesan = "Gagal menghapus data antrian.";
                 $tipe_pesan = "error";
             }
@@ -71,6 +115,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($antrian_id > 0 && !empty($items)) {
             try {
                 $conn->begin_transaction();
+
+                $stmt = $conn->prepare("SELECT id FROM antrian WHERE id = ? AND jenis_kegiatan = ? AND status <> 'selesai' FOR UPDATE");
+                $stmt->bind_param("is", $antrian_id, $jenis_kegiatan);
+                $stmt->execute();
+                if (!$stmt->get_result()->fetch_assoc()) {
+                    throw new DomainException("Antrian tidak tersedia atau sudah selesai.");
+                }
 
                 foreach ($items as $item) {
                     $barang_id = isset($item["barangId"]) && $item["barangId"] !== "" ? (int) $item["barangId"] : null;
@@ -110,9 +161,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $stmt->bind_param("i", $antrian_id);
                 $stmt->execute();
 
+                hapus_panggilan($conn, $antrian_id, $jenis_kegiatan);
                 $conn->commit();
                 $pesan = "Barang berhasil disimpan. Antrian ditandai selesai.";
-            } catch (mysqli_sql_exception $e) {
+            } catch (mysqli_sql_exception | DomainException $e) {
                 $conn->rollback();
                 $pesan = "Gagal menyimpan data barang: " . $e->getMessage();
                 $tipe_pesan = "error";
@@ -233,9 +285,10 @@ if ($tanggal !== "") { $query_params["tanggal"] = $tanggal; }
 $base_qs = http_build_query($query_params);
 
 $badge_jenis = $jenis_kegiatan === "bongkar" ? "badge-masuk" : "badge-keluar";
+$panggilan_saat_ini = panggilan_aktif($conn)[$jenis_kegiatan];
 
 // Encode detail barang untuk JS
-$detail_barang_json = json_encode($detail_barang_per_antrian, JSON_HEX_APOS);
+$detail_barang_json = json_encode($detail_barang_per_antrian, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 
 require "config/header.php";
 ?>
@@ -246,13 +299,14 @@ window.detailBarangData = <?= $detail_barang_json ?>;
 
 <div class="page-head">
     <div>
+        <span class="eyebrow">Operasional gudang</span>
         <h1>Antrian <?= htmlspecialchars($jenis_label) ?></h1>
         <p>
             Daftar kendaraan <strong><?= $jenis_kegiatan === "bongkar" ? "bongkar" : "muat" ?></strong>
             (barang <?= strtolower($jenis_label) ?>) beserta status prosesnya.
         </p>
     </div>
-    <a href="index.php" class="btn btn-ghost" target="_blank" rel="noopener">Buka Form Pendaftaran</a>
+    <a href="index.php" class="btn btn-primary" target="_blank" rel="noopener"><?= ui_icon('plus') ?> Daftarkan Kendaraan</a>
 </div>
 
 <?php if ($pesan !== ""): ?>
@@ -310,6 +364,8 @@ window.detailBarangData = <?= $detail_barang_json ?>;
 </section>
 
 <section class="panel">
+    <h2>Daftar Kendaraan <span class="count-label"><?= $total_rows ?></span></h2>
+    <p class="panel-sub">Klik Panggil untuk menampilkan nomor di papan antrian publik. Panggilan terbaru menggantikan nomor pada jalur yang sama.</p>
     <?php if (empty($daftar)): ?>
         <div class="empty">
             <?= ($status !== "" || $q !== "" || $tanggal !== "")
@@ -336,7 +392,10 @@ window.detailBarangData = <?= $detail_barang_json ?>;
                 </thead>
                 <tbody>
                     <?php foreach ($daftar as $a): ?>
-                        <?php $jml = $jumlah_barang_per_antrian[$a["id"]] ?? null; ?>
+                        <?php
+                        $jml = $jumlah_barang_per_antrian[$a["id"]] ?? null;
+                        $sedang_dipanggil = ($panggilan_saat_ini["id"] ?? null) === (int) $a["id"];
+                        ?>
                         <tr>
                             <td class="cell-strong">
                                 <?= htmlspecialchars($a["nomor_antrian"]) ?>
@@ -361,14 +420,21 @@ window.detailBarangData = <?= $detail_barang_json ?>;
                                 <span class="badge badge-<?= htmlspecialchars($a["status"]) ?>">
                                     <?= ucfirst(htmlspecialchars($a["status"])) ?>
                                 </span>
+                                <?php if ($sedang_dipanggil): ?><div class="cell-muted">Tampil di papan antrian</div><?php endif; ?>
                             </td>
                             <td class="no-print">
                                 <?php if ($a["status"] !== "selesai"): ?>
                                     <div class="cell-actions">
+                                        <form method="post" class="call-form">
+                                            <input type="hidden" name="aksi" value="panggil">
+                                            <input type="hidden" name="id" value="<?= (int) $a['id'] ?>">
+                                            <input type="hidden" name="panggilan_token" value="<?= htmlspecialchars($_SESSION['panggilan_token']) ?>">
+                                            <button type="submit" class="btn btn-info btn-sm" aria-label="<?= $sedang_dipanggil ? 'Panggil ulang' : 'Panggil' ?> antrian <?= htmlspecialchars($a['nomor_antrian']) ?>"><?= ui_icon('arrow') ?> <?= $sedang_dipanggil ? 'Panggil Ulang' : 'Panggil' ?></button>
+                                        </form>
                                         <form method="post" class="status-form">
                                             <input type="hidden" name="aksi" value="status">
                                             <input type="hidden" name="id" value="<?= (int) $a["id"] ?>">
-                                            <select name="status" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border);font-family:inherit;font-size:13px;">
+                                            <select name="status" aria-label="Status antrian <?= htmlspecialchars($a['nomor_antrian']) ?>">
                                                 <?php foreach ($status_dropdown as $s): ?>
                                                     <option value="<?= $s ?>" <?= $a["status"] === $s ? "selected" : "" ?>>
                                                         <?= ucfirst($s) ?>
@@ -426,24 +492,5 @@ window.detailBarangData = <?= $detail_barang_json ?>;
     <?php endif; ?>
 </section>
 
-<?php require "config/footer.php"; ?>
-
-<style>
-.status-form {
-    margin-bottom: 4px;
-}
-.cell-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    align-items: center;
-}
-.cell-actions form {
-    margin: 0;
-}
-.cell-actions select {
-    max-width: 120px;
-}
-</style>
-
 <?php require "config/modal_barang.php"; ?>
+<?php require "config/footer.php"; ?>

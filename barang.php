@@ -120,9 +120,11 @@ require "config/header.php";
 
 <div class="page-head">
     <div>
+        <span class="eyebrow">Inventaris</span>
         <h1>Data Barang</h1>
         <p>Kelola daftar barang dan stok yang tersimpan di gudang.</p>
     </div>
+    <a href="<?= $edit ? 'barang.php#form-barang' : '#form-barang' ?>" class="btn btn-primary"><?= ui_icon('plus') ?> Tambah Barang</a>
 </div>
 
 <?php if ($pesan !== ""): ?>
@@ -134,27 +136,15 @@ require "config/header.php";
 
 
 <section class="panel">
-    <div class="page-head" style="margin-bottom:16px;">
-        <h2 style="margin:0;">Daftar Barang (<?= $total_item ?>)</h2>
-        <form method="get" action="barang.php" class="toolbar" style="margin:0;">
+    <div class="panel-heading">
+        <h2>Daftar Barang <span class="count-label"><?= $total_item ?></span></h2>
+        <form method="get" action="barang.php" class="toolbar" role="search">
             <div class="field">
-                <input type="text" name="q" value="<?= htmlspecialchars($q) ?>"
+                <label for="cari-barang" class="sr-only">Cari barang</label>
+                <input type="search" id="cari-barang" name="q" value="<?= htmlspecialchars($q) ?>"
                        placeholder="Cari kode / nama / kategori / lokasi">
             </div>
-            <button type="submit" class="btn btn-ghost">Cari</button>
-            <?php if ($q !== ""): ?>
-                <a href="barang.php" class="btn btn-ghost">Reset</a>
-            <?php endif; ?>
-        </form>
-    </div>
-    <div class="page-head" style="margin-bottom:16px;">
-        <h2 style="margin:0;">Daftar Barang (<?= $total_item ?>)</h2>
-        <form method="get" action="barang.php" class="toolbar" style="margin:0;">
-            <div class="field">
-                <input type="text" name="q" value="<?= htmlspecialchars($q) ?>"
-                       placeholder="Cari kode / nama / kategori / lokasi">
-            </div>
-            <button type="submit" class="btn btn-ghost">Cari</button>
+            <button type="submit" class="btn btn-ghost"><?= ui_icon('search') ?> Cari</button>
             <?php if ($q !== ""): ?>
                 <a href="barang.php" class="btn btn-ghost">Reset</a>
             <?php endif; ?>
@@ -200,7 +190,7 @@ require "config/header.php";
                             <td>
                                 <div class="cell-actions">
                                     <a class="btn btn-ghost btn-sm"
-                                       href="barang.php?edit=<?= (int) $b["id"] ?><?= $q !== "" ? "&q=" . urlencode($q) : "" ?>">Edit</a>
+                                       href="barang.php?edit=<?= (int) $b["id"] ?><?= $q !== "" ? "&q=" . urlencode($q) : "" ?>#form-barang">Edit</a>
                                     <?php if (is_admin()): ?>
                                         <form method="post" action="barang.php"
                                               onsubmit="return confirm('Hapus barang <?= htmlspecialchars($b["kode_barang"], ENT_QUOTES) ?>?');">
@@ -219,7 +209,7 @@ require "config/header.php";
     <?php endif; ?>
 </section>
 
-<section class="panel">
+<section class="panel form-panel" id="form-barang">
     <h2><?= $edit ? "Edit Barang" : "Tambah Barang" ?></h2>
     <p class="panel-sub">Kode barang harus unik. Jumlah stok tidak boleh negatif.</p>
 

@@ -5,6 +5,9 @@ config/db.local.php
 # Helper lokal (generator hash password)
 a.php
 
+# Catatan konten promosi (bukan bagian aplikasi)
+script_video_promosi.txt
+
 # Log & file OS
 *.log
 .DS_Store

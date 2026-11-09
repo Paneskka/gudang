@@ -8,6 +8,7 @@ Aplikasi web PHP native + MySQL untuk manajemen antrian kendaraan bongkar/muat d
 - Dashboard ringkasan stok & antrian
 - Data barang (CRUD)
 - Antrian masuk & keluar (nomor antrian, driver, plat, perusahaan, status)
+- Papan antrian dipanggil untuk bongkar/muat, diperbarui otomatis setiap 5 detik
 - Detail barang per antrian
 - Laporan
 - Kelola user (khusus admin)
@@ -43,6 +44,15 @@ Aplikasi web PHP native + MySQL untuk manajemen antrian kendaraan bongkar/muat d
 5. Buka `http://localhost/gudang`.
 
 Login default: `admin` / `admin123` — **ganti setelah login pertama**.
+
+## Memanggil Antrian
+
+1. Admin atau petugas membuka **Antrian Masuk** (bongkar) atau **Antrian Keluar** (muat).
+2. Klik **Panggil** pada kendaraan. Status menjadi **Diproses** dan nomor serta plat muncul di halaman pendaftaran.
+3. Setiap jalur menampilkan satu panggilan terakhir. **Panggil Ulang** menampilkan kembali kendaraan yang sama.
+4. Saat antrian selesai, dikembalikan ke **Menunggu**, atau dihapus, panggilannya hilang dari papan.
+
+Papan memperbarui datanya tanpa memuat ulang formulir pendaftaran. Mengubah status lewat dropdown saja tidak membuat panggilan baru. Tabel `antrian_panggilan` dibuat otomatis saat aplikasi dibuka; data antrian lama tetap dapat dipanggil.
 
 ## Deploy ke InfinityFree
 

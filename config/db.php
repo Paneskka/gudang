@@ -38,6 +38,15 @@ if ($res && $res->num_rows === 0) {
     $conn->query("ALTER TABLE antrian ADD COLUMN barang_diperiksa TINYINT(1) NOT NULL DEFAULT 0 AFTER status");
 }
 
+// Satu panggilan terakhir untuk setiap jalur bongkar/muat.
+$conn->query(
+    "CREATE TABLE IF NOT EXISTS antrian_panggilan (
+        jenis_kegiatan ENUM('muat','bongkar') NOT NULL PRIMARY KEY,
+        antrian_id INT NOT NULL,
+        dipanggil_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4"
+);
+
 // ================= SETUP KOLOM HAK AKSES =================
 // Role default 'admin' supaya akun lama tidak kehilangan akses
 $res = $conn->query("SHOW COLUMNS FROM admin LIKE 'role'");

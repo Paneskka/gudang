@@ -116,12 +116,13 @@ $qs_export = http_build_query(array_filter([
 
 <div class="page-head">
     <div>
+        <span class="eyebrow">Analisis operasional</span>
         <h1>Laporan Antrian</h1>
         <p>Rekap aktivitas antrian gudang periode <strong><?= htmlspecialchars($bulan_ini) ?></strong>.</p>
     </div>
     <div class="cell-actions no-print">
-        <a href="laporan.php?<?= $qs_export ?>" class="btn btn-ghost">Export CSV</a>
-        <button type="button" class="btn btn-primary" onclick="window.print()">Cetak</button>
+        <a href="laporan.php?<?= $qs_export ?>" class="btn btn-ghost"><?= ui_icon('in') ?> Export CSV</a>
+        <button type="button" class="btn btn-primary" onclick="window.print()"><?= ui_icon('print') ?> Cetak</button>
     </div>
 </div>
 

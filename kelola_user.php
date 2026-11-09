@@ -150,9 +150,11 @@ require "config/header.php";
 
 <div class="page-head">
     <div>
+        <span class="eyebrow">Manajemen akses</span>
         <h1>Kelola User</h1>
         <p>Atur akun admin dan petugas beserta hak aksesnya.</p>
     </div>
+    <a class="btn btn-primary" href="<?= $edit ? 'kelola_user.php#form-user' : '#form-user' ?>"><?= ui_icon('plus') ?> Tambah User</a>
 </div>
 
 <?php if ($pesan !== ""): ?>
@@ -162,7 +164,7 @@ require "config/header.php";
 <?php endif; ?>
 
 <section class="panel">
-    <h2>Daftar User (<?= count($daftar_user) ?>)</h2>
+    <h2>Daftar User <span class="count-label"><?= count($daftar_user) ?></span></h2>
     <div class="table-wrap">
         <table class="data">
             <thead>
@@ -194,7 +196,7 @@ require "config/header.php";
                         </td>
                         <td>
                             <div class="cell-actions">
-                                <a class="btn btn-ghost btn-sm" href="kelola_user.php?edit=<?= (int) $u["id"] ?>">Edit</a>
+                                <a class="btn btn-ghost btn-sm" href="kelola_user.php?edit=<?= (int) $u["id"] ?>#form-user">Edit</a>
 
                                 <?php if ((int) $u["id"] !== (int) $_SESSION["admin_id"]): ?>
                                     <form method="post" action="kelola_user.php">
@@ -221,7 +223,7 @@ require "config/header.php";
     </div>
 </section>
 
-<section class="panel">
+<section class="panel form-panel" id="form-user">
     <h2><?= $edit ? "Edit User" : "Tambah User" ?></h2>
     <p class="panel-sub">Admin punya akses penuh. Petugas tidak bisa akses laporan, kelola user, atau menghapus data.</p>
 

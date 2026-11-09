@@ -69,3 +69,13 @@ CREATE TABLE IF NOT EXISTS `antrian_barang` (
   KEY `idx_antrian` (`antrian_id`),
   KEY `idx_barang` (`barang_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ------------------------------------------------------------
+-- Tabel: antrian_panggilan (panggilan terakhir per jalur)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `antrian_panggilan` (
+  `jenis_kegiatan` enum('muat','bongkar') NOT NULL,
+  `antrian_id` int NOT NULL,
+  `dipanggil_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  PRIMARY KEY (`jenis_kegiatan`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
