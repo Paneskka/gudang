@@ -154,7 +154,7 @@ require "config/header.php";
         <h1>Kelola User</h1>
         <p>Atur akun admin dan petugas beserta hak aksesnya.</p>
     </div>
-    <a class="btn btn-primary" href="<?= $edit ? 'kelola_user.php#form-user' : '#form-user' ?>"><?= ui_icon('plus') ?> Tambah User</a>
+    <a class="btn btn-primary" href="<?= $edit ? 'kelola-user#form-user' : '#form-user' ?>"><?= ui_icon('plus') ?> Tambah User</a>
 </div>
 
 <?php if ($pesan !== ""): ?>
@@ -196,10 +196,10 @@ require "config/header.php";
                         </td>
                         <td>
                             <div class="cell-actions">
-                                <a class="btn btn-ghost btn-sm" href="kelola_user.php?edit=<?= (int) $u["id"] ?>#form-user">Edit</a>
+                                <a class="btn btn-ghost btn-sm" href="kelola-user?edit=<?= (int) $u["id"] ?>#form-user">Edit</a>
 
                                 <?php if ((int) $u["id"] !== (int) $_SESSION["admin_id"]): ?>
-                                    <form method="post" action="kelola_user.php">
+                                    <form method="post" action="kelola-user">
                                         <input type="hidden" name="aksi" value="toggle">
                                         <input type="hidden" name="id" value="<?= (int) $u["id"] ?>">
                                         <button type="submit" class="btn btn-ghost btn-sm">
@@ -207,7 +207,7 @@ require "config/header.php";
                                         </button>
                                     </form>
 
-                                    <form method="post" action="kelola_user.php"
+                                    <form method="post" action="kelola-user"
                                           onsubmit="return confirm('Hapus user <?= htmlspecialchars($u["username"], ENT_QUOTES) ?>?');">
                                         <input type="hidden" name="aksi" value="hapus">
                                         <input type="hidden" name="id" value="<?= (int) $u["id"] ?>">
@@ -227,7 +227,7 @@ require "config/header.php";
     <h2><?= $edit ? "Edit User" : "Tambah User" ?></h2>
     <p class="panel-sub">Admin punya akses penuh. Petugas tidak bisa akses laporan, kelola user, atau menghapus data.</p>
 
-    <form method="post" action="kelola_user.php">
+    <form method="post" action="kelola-user">
         <input type="hidden" name="aksi" value="simpan">
         <input type="hidden" name="id" value="<?= $edit ? (int) $edit["id"] : 0 ?>">
 
@@ -259,7 +259,7 @@ require "config/header.php";
                 <?= $edit ? "Simpan Perubahan" : "Tambah User" ?>
             </button>
             <?php if ($edit): ?>
-                <a href="kelola_user.php" class="btn btn-ghost">Batal</a>
+                <a href="kelola-user" class="btn btn-ghost">Batal</a>
             <?php endif; ?>
         </div>
     </form>

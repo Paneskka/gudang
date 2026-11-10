@@ -7,12 +7,12 @@ $admin_role = $_SESSION["admin_role"] ?? "petugas";
 $page_title = $page_title ?? "Sistem Antrian Gudang";
 $active_page = $active_page ?? "";
 $nav_items = [
-    "dashboard" => ["label" => "Dashboard", "href" => "dashboard.php", "icon" => "grid"],
-    "barang" => ["label" => "Data Barang", "href" => "barang.php", "icon" => "box"],
-    "masuk" => ["label" => "Antrian Masuk", "href" => "antrian_masuk.php", "icon" => "in"],
-    "keluar" => ["label" => "Antrian Keluar", "href" => "antrian_keluar.php", "icon" => "out"],
-    "laporan" => ["label" => "Laporan", "href" => "laporan.php", "icon" => "chart"],
-    "users" => ["label" => "Kelola User", "href" => "kelola_user.php", "icon" => "users"],
+    "dashboard" => ["label" => "Dashboard", "href" => "dashboard", "icon" => "grid"],
+    "barang" => ["label" => "Data Barang", "href" => "barang", "icon" => "box"],
+    "masuk" => ["label" => "Antrian Masuk", "href" => "antrian-masuk", "icon" => "in"],
+    "keluar" => ["label" => "Antrian Keluar", "href" => "antrian-keluar", "icon" => "out"],
+    "laporan" => ["label" => "Laporan", "href" => "laporan", "icon" => "chart"],
+    "users" => ["label" => "Kelola User", "href" => "kelola-user", "icon" => "users"],
 ];
 if (!is_admin()) {
     unset($nav_items["laporan"], $nav_items["users"]);
@@ -41,7 +41,7 @@ $section_label = $nav_items[$active_page]["label"] ?? "Operasional";
     <button class="sidebar-backdrop" type="button" aria-label="Tutup navigasi" tabindex="-1" hidden></button>
     <aside class="sidebar" id="sidebar" aria-label="Navigasi utama">
         <div class="sidebar-brand">
-            <a class="brand-lockup" href="dashboard.php">
+            <a class="brand-lockup" href="dashboard">
                 <img src="<?= ui_asset('assets/img/favicon.svg') ?>" width="40" height="40" alt="">
                 <span><strong>Gudang<span class="brand-dot">.</span></strong><small>SISTEM ANTRIAN</small></span>
             </a>
@@ -61,12 +61,12 @@ $section_label = $nav_items[$active_page]["label"] ?? "Operasional";
                 <span class="sidebar-help-icon"><?= ui_icon('truck') ?></span>
                 <strong>Mulai dari antrian.</strong>
                 <p>Daftarkan kendaraan untuk proses bongkar atau muat.</p>
-                <a href="index.php">Halaman pendaftaran <?= ui_icon('external') ?></a>
+                <a href="index">Halaman pendaftaran <?= ui_icon('external') ?></a>
             </div>
             <div class="sidebar-user">
                 <span class="avatar"><?= ui_icon('users') ?></span>
                 <div><strong><?= htmlspecialchars($admin_username) ?></strong><small><?= $role_label ?></small></div>
-                <a href="logout.php" class="icon-button" aria-label="Keluar dari akun" title="Keluar"><?= ui_icon('logout') ?></a>
+                <a href="logout" class="icon-button" aria-label="Keluar dari akun" title="Keluar"><?= ui_icon('logout') ?></a>
             </div>
         </div>
     </aside>

@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             try {
                 $nomor = panggil_antrian($conn, (int) ($_POST["id"] ?? 0), $jenis_kegiatan);
                 $_SESSION["panggilan_pesan"] = "Antrian $nomor dipanggil dan ditampilkan di halaman pendaftaran. Status menjadi diproses.";
-                $tujuan = $jenis_kegiatan === "bongkar" ? "antrian_masuk.php" : "antrian_keluar.php";
+                $tujuan = $jenis_kegiatan === "bongkar" ? "antrian-masuk" : "antrian-keluar";
                 $filter = http_build_query($_GET);
                 header("Location: " . $tujuan . ($filter !== "" ? "?" . $filter : ""), true, 303);
                 exit;
@@ -306,7 +306,7 @@ window.detailBarangData = <?= $detail_barang_json ?>;
             (barang <?= strtolower($jenis_label) ?>) beserta status prosesnya.
         </p>
     </div>
-    <a href="index.php" class="btn btn-primary" target="_blank" rel="noopener"><?= ui_icon('plus') ?> Daftarkan Kendaraan</a>
+    <a href="index" class="btn btn-primary" target="_blank" rel="noopener"><?= ui_icon('plus') ?> Daftarkan Kendaraan</a>
 </div>
 
 <?php if ($pesan !== ""): ?>

@@ -19,11 +19,11 @@
     <a class="skip-link" href="#pendaftaran">Lewati ke formulir pendaftaran</a>
     <header class="public-header">
         <div class="public-nav">
-            <a class="brand-lockup" href="index.php"><img src="<?= ui_asset('assets/img/favicon.svg') ?>" width="40" height="40" alt=""><span><strong>Gudang.</strong><small>SISTEM ANTRIAN</small></span></a>
+            <a class="brand-lockup" href="index"><img src="<?= ui_asset('assets/img/favicon.svg') ?>" width="40" height="40" alt=""><span><strong>Gudang.</strong><small>SISTEM ANTRIAN</small></span></a>
             <nav aria-label="Navigasi halaman utama">
                 <a class="public-nav-link" href="#pendaftaran">Pendaftaran</a>
                 <a class="public-nav-link" href="#cari">Cek antrian</a>
-                <a class="btn btn-primary" href="login.php"><?= ui_icon('lock') ?> Login <span class="login-label">Admin</span></a>
+                <a class="btn btn-primary" href="login"><?= ui_icon('lock') ?> Login <span class="login-label">Admin</span></a>
             </nav>
         </div>
     </header>
@@ -33,7 +33,7 @@
                 <span class="story-label"><span></span> Sistem antrian kendaraan</span>
                 <h1 id="public-title">Antrian tertata.<br><em>Gudang lebih lancar.</em></h1>
                 <p class="story-description">Daftarkan kendaraan, dapatkan nomor antrian, dan pantau proses bongkar muat dalam satu tempat.</p>
-                <section class="call-board" id="panggilan-antrian" aria-labelledby="panggilan-title" data-endpoint="antrian_dipanggil.php">
+                <section class="call-board" id="panggilan-antrian" aria-labelledby="panggilan-title" data-endpoint="antrian-dipanggil">
                     <div class="call-board-header">
                         <h2 id="panggilan-title">Antrian dipanggil</h2>
                         <span class="call-live" data-live-label>Terkini</span>
@@ -64,7 +64,7 @@
                 <?php if ($pesan_daftar): ?>
                     <div class="alert <?= $pendaftaran_berhasil ? 'alert-success' : 'alert-error' ?>" role="status"><?= $pesan_daftar ?></div>
                 <?php endif; ?>
-                <form method="post" action="index.php#pendaftaran">
+                <form method="post" action="index#pendaftaran">
                     <div class="field">
                         <label for="driver">Nama driver <span class="required-mark">*</span></label>
                         <input id="driver" name="driver" type="text" maxlength="100" autocomplete="name" required placeholder="Nama lengkap driver" value="<?= !$pendaftaran_berhasil ? htmlspecialchars($_POST['driver'] ?? '') : '' ?>">
@@ -101,7 +101,7 @@
         <section class="queue-search" id="cari" aria-labelledby="search-title">
             <div class="search-heading"><span class="search-icon"><?= ui_icon('search') ?></span><span class="eyebrow">Lacak kendaraan</span><h2 id="search-title">Sudah sampai <br>mana antrian Anda?</h2><p>Masukkan nomor yang diperoleh saat pendaftaran untuk melihat status terakhir.</p></div>
             <div class="search-content">
-                <form method="post" action="index.php#cari">
+                <form method="post" action="index#cari">
                     <label for="nomor-antrian">Nomor antrian</label>
                     <div class="search-input-row"><input type="text" id="nomor-antrian" name="nomor_antrian" maxlength="10" required class="uppercase-input" placeholder="Contoh: B001 atau M001" value="<?= htmlspecialchars($_POST['nomor_antrian'] ?? '') ?>"><button type="submit" name="cek_status" class="btn btn-primary"><?= ui_icon('search') ?> Cari Status</button></div>
                 </form>

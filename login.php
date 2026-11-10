@@ -4,7 +4,7 @@ require "config/db.php";
 require_once "config/ui.php";
 
 if (isset($_SESSION["admin_id"])) {
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit;
 }
 $pesan_error = "";
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $_SESSION["admin_id"] = $admin["id"];
                     $_SESSION["admin_username"] = $admin["username"];
                     $_SESSION["admin_role"] = $admin["role"] ?? "admin";
-                    header("Location: dashboard.php");
+                    header("Location: dashboard");
                     exit;
                 }
             } else {
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="auth-layout">
         <aside class="auth-story" aria-label="Sistem Antrian Gudang">
             <img class="auth-background" src="<?= ui_asset('assets/img/warehouse-background.webp') ?>" width="1800" height="1000" alt="" fetchpriority="high">
-            <a class="brand-lockup" href="index.php"><img src="<?= ui_asset('assets/img/favicon.svg') ?>" width="40" height="40" alt=""><span><strong>Gudang.</strong><small>SISTEM ANTRIAN</small></span></a>
+            <a class="brand-lockup" href="index"><img src="<?= ui_asset('assets/img/favicon.svg') ?>" width="40" height="40" alt=""><span><strong>Gudang.</strong><small>SISTEM ANTRIAN</small></span></a>
             <div class="auth-story-content">
                 <span class="eyebrow">Ruang kerja operasional</span>
                 <h2>Semua bergerak.<br><em>Semua tercatat.</em></h2>
@@ -84,14 +84,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="auth-story-footer"><span>Sistem Antrian Gudang</span><span>Operasional lebih tertata.</span></div>
         </aside>
         <main class="auth-main">
-            <a class="auth-back" href="index.php"><?= ui_icon('arrow') ?> Kembali ke pendaftaran</a>
+            <a class="auth-back" href="index"><?= ui_icon('arrow') ?> Kembali ke pendaftaran</a>
             <div class="auth-form" id="login-form" tabindex="-1">
                 <span class="auth-lock"><?= ui_icon('lock') ?></span>
                 <span class="eyebrow">Masuk ke ruang kerja</span>
                 <h1>Selamat datang<br>kembali.</h1>
                 <p class="auth-description">Gunakan akun Anda untuk mengelola aktivitas gudang hari ini.</p>
                 <?php if ($pesan_error): ?><div class="alert alert-error" role="alert"><?= htmlspecialchars($pesan_error) ?></div><?php endif; ?>
-                <form method="post" action="login.php">
+                <form method="post" action="login">
                     <div class="field">
                         <label for="username">Username</label>
                         <input type="text" id="username" name="username" autocomplete="username" placeholder="Masukkan username" required value="<?= htmlspecialchars($_POST['username'] ?? '') ?>">

@@ -121,7 +121,7 @@ $qs_export = http_build_query(array_filter([
         <p>Rekap aktivitas antrian gudang periode <strong><?= htmlspecialchars($bulan_ini) ?></strong>.</p>
     </div>
     <div class="cell-actions no-print">
-        <a href="laporan.php?<?= $qs_export ?>" class="btn btn-ghost"><?= ui_icon('in') ?> Export CSV</a>
+        <a href="laporan?<?= $qs_export ?>" class="btn btn-ghost"><?= ui_icon('in') ?> Export CSV</a>
         <button type="button" class="btn btn-primary" onclick="window.print()"><?= ui_icon('print') ?> Cetak</button>
     </div>
 </div>
@@ -155,7 +155,7 @@ $qs_export = http_build_query(array_filter([
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Tampilkan</button>
-        <a href="laporan.php" class="btn btn-ghost">Reset</a>
+        <a href="laporan" class="btn btn-ghost">Reset</a>
     </form>
 </section>
 

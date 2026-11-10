@@ -9,7 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . "/db.php";
 
 if (!isset($_SESSION["admin_id"])) {
-    header("Location: login.php");
+    header("Location: login");
     exit;
 }
 
@@ -22,7 +22,7 @@ $current_user = $stmt->get_result()->fetch_assoc();
 if (!$current_user || (int) $current_user["aktif"] !== 1) {
     session_unset();
     session_destroy();
-    header("Location: login.php");
+    header("Location: login");
     exit;
 }
 
@@ -37,7 +37,7 @@ function is_admin(): bool
 function require_admin(): void
 {
     if (!is_admin()) {
-        header("Location: dashboard.php");
+        header("Location: dashboard");
         exit;
     }
 }
