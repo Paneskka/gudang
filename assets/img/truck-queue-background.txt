@@ -1,0 +1,15 @@
+Kredit foto latar antrean kendaraan
+
+Judul: Transportasi Dan Refleksi Di Pelabuhan
+Fotografer: Djunaidibd
+Lokasi: Pelabuhan Tanjung Emas, Semarang, Jawa Tengah, Indonesia
+Sumber: https://commons.wikimedia.org/wiki/File:Transportasi_Dan_Refleksi_Di_Pelabuhan.jpg
+Lisensi: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+https://creativecommons.org/licenses/by-sa/4.0/
+
+Adaptasi: foto dipotong untuk memusatkan deretan truk, diperkecil menjadi
+1920 x 648 piksel, dan dikonversi ke WebP. Tampilan halaman menambahkan
+lapisan putih transparan melalui CSS. Adaptasi foto menggunakan lisensi
+CC BY-SA 4.0 yang sama.
+
+Foto stok digunakan sebagai latar dekoratif; bukan dokumentasi lokasi gudang.

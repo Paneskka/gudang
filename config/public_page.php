@@ -117,6 +117,6 @@
             </div>
         </section>
     </main>
-    <footer class="public-footer"><span><strong>Gudang.</strong> &nbsp; Sistem Antrian Gudang</span><span>Operasional lebih tertata.</span></footer>
+    <footer class="public-footer"><span><strong>Gudang.</strong> &nbsp; Sistem Antrian Gudang</span><a class="photo-credit" href="<?= ui_asset('assets/img/truck-queue-background.txt') ?>">Kredit foto</a><span>Operasional lebih tertata.</span></footer>
 </body>
 </html>
