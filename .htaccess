@@ -1,21 +1,23 @@
 # URL bersih: /dashboard -> dashboard.php (tanpa ekstensi .php)
+# Tidak memakai RewriteBase agar tetap jalan di root domain maupun subfolder.
 
 RewriteEngine On
-RewriteBase /
 
-# 1. Redirect permintaan langsung berpola *.php ke URL bersih (GET/HEAD saja).
+# 1. Redirect permintaan langsung *.php ke URL bersih (GET/HEAD saja).
+#    THE_REQUEST tidak berubah oleh rewrite internal, jadi tidak memicu loop.
 RewriteCond %{REQUEST_METHOD} ^(GET|HEAD)$
-RewriteCond %{THE_REQUEST} \s/+[^?\s]*\.php[?\s] [NC]
-RewriteRule ^([a-zA-Z0-9_-]+)\.php$ $1 [R=302,L]
+RewriteCond %{THE_REQUEST} ^[A-Z]+\s+[^?\s]*\.php(?:\?|\s) [NC]
+RewriteCond %{REQUEST_URI} ^(.*)/([A-Za-z0-9_-]+)\.php$
+RewriteRule ^ %1/%2 [R=302,L]
 
-# 2. Alias dengan tanda hubung untuk file yang bernama berunderscore.
+# 2. Alias bertanda hubung untuk file berunderscore.
 RewriteRule ^antrian-dipanggil$ antrian_dipanggil.php [L]
 RewriteRule ^antrian-masuk$ antrian_masuk.php [L]
 RewriteRule ^antrian-keluar$ antrian_keluar.php [L]
 RewriteRule ^kelola-user$ kelola_user.php [L]
 
-# 3. Tahap internal: /name -> name.php bila file yang cocok ada.
+# 3. Tahap internal: /nama -> nama.php bila file yang cocok ada.
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^([a-zA-Z0-9_-]+)$ $1.php [L]
+RewriteRule ^([A-Za-z0-9_-]+)$ $1.php [L]
