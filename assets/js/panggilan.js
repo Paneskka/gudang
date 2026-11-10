@@ -39,7 +39,7 @@
         const timeout = setTimeout(() => controller.abort(), 8000);
         try {
             const response = await fetch(board.dataset.endpoint, {
-                cache: 'no-store', credentials: 'omit', signal: controller.signal,
+                cache: 'no-store', credentials: 'same-origin', signal: controller.signal,
                 headers: { Accept: 'application/json' }
             });
             if (!response.ok) throw new Error('Panggilan tidak dapat dimuat');
