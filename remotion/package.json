@@ -1,0 +1,28 @@
+{
+  "name": "gudang-promo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Video promosi 9:16 untuk Sistem Antrian Gudang, dibuat dengan Remotion",
+  "scripts": {
+    "dev": "remotion studio",
+    "tts": "node scripts/tts.mjs",
+    "fonts": "node scripts/fetch-fonts.mjs",
+    "render": "remotion render GudangPromo out/gudang-promo.mp4",
+    "still": "remotion still GudangPromo out/frame.png",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.542",
+    "@remotion/fonts": "4.0.542",
+    "@remotion/transitions": "4.0.542",
+    "msedge-tts": "2.1.1",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "remotion": "4.0.542"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.0",
+    "typescript": "5.8.3"
+  }
+}

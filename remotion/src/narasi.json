@@ -1,0 +1,50 @@
+[
+  {
+    "key": "intro",
+    "file": "01",
+    "minFrames": 90,
+    "text": "Gudang. Sistem antrian kendaraan bongkar muat."
+  },
+  {
+    "key": "public",
+    "file": "02",
+    "minFrames": 150,
+    "text": "Driver daftar sendiri lewat halaman publik. Pilih bongkar atau muat, nomor antrian langsung terbit."
+  },
+  {
+    "key": "register",
+    "file": "03",
+    "minFrames": 150,
+    "text": "Cukup isi nama driver, nomor polisi, dan perusahaan. Nomor antrian otomatis: B untuk bongkar, M untuk muat."
+  },
+  {
+    "key": "login",
+    "file": "04",
+    "minFrames": 120,
+    "text": "Petugas masuk dengan akun masing-masing. Admin punya akses penuh."
+  },
+  {
+    "key": "dashboard",
+    "file": "05",
+    "minFrames": 210,
+    "text": "Dashboard menampilkan antrian aktif, stok barang, dan grafik tujuh hari terakhir. Semua dalam satu layar."
+  },
+  {
+    "key": "barang",
+    "file": "06",
+    "minFrames": 165,
+    "text": "Data barang dikelola dari satu tabel. Tambah, ubah, hapus. Stok selalu terbarui."
+  },
+  {
+    "key": "laporan",
+    "file": "07",
+    "minFrames": 135,
+    "text": "Laporan per periode siap dicetak, untuk rekap bongkar muat."
+  },
+  {
+    "key": "outro",
+    "file": "08",
+    "minFrames": 135,
+    "text": "Antrian tertata, gudang lebih lancar."
+  }
+]

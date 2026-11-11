@@ -1,0 +1,42 @@
+[
+  {
+    "family": "Space Grotesk",
+    "weight": "400",
+    "file": "fonts/space-grotesk-400.woff2"
+  },
+  {
+    "family": "Space Grotesk",
+    "weight": "500",
+    "file": "fonts/space-grotesk-500.woff2"
+  },
+  {
+    "family": "Space Grotesk",
+    "weight": "600",
+    "file": "fonts/space-grotesk-600.woff2"
+  },
+  {
+    "family": "Space Grotesk",
+    "weight": "700",
+    "file": "fonts/space-grotesk-700.woff2"
+  },
+  {
+    "family": "Inter",
+    "weight": "400",
+    "file": "fonts/inter-400.woff2"
+  },
+  {
+    "family": "Inter",
+    "weight": "500",
+    "file": "fonts/inter-500.woff2"
+  },
+  {
+    "family": "Inter",
+    "weight": "600",
+    "file": "fonts/inter-600.woff2"
+  },
+  {
+    "family": "Inter",
+    "weight": "700",
+    "file": "fonts/inter-700.woff2"
+  }
+]

@@ -3,6 +3,9 @@ config/db.local.php
 a.php
 script_video_promosi.txt
 *.log
+remotion/node_modules/
+remotion/out/
+remotion/.remotion/
 .DS_Store
 Thumbs.db
 desktop.ini
