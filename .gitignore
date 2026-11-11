@@ -1,7 +1,6 @@
 config/db.local.php
 .env
 a.php
-script_video_promosi.txt
 *.log
 remotion/node_modules/
 remotion/out/
