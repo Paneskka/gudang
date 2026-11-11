@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@remotion/cli": "4.0.542",
+    "@remotion/compositor-win32-x64-msvc": "^4.0.542",
     "@remotion/fonts": "4.0.542",
     "@remotion/transitions": "4.0.542",
     "msedge-tts": "2.1.1",
