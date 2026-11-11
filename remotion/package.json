@@ -17,6 +17,7 @@
     "@remotion/fonts": "4.0.542",
     "@remotion/transitions": "4.0.542",
     "msedge-tts": "2.1.1",
+    "qrcode": "^1.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "remotion": "4.0.542"
